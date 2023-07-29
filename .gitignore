@@ -1,0 +1,5 @@
+
+node_modules
+# Sensitive Info
+.env.development
+.env.production
