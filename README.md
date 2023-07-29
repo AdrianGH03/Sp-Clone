@@ -21,4 +21,4 @@ DISCLAIMERS
 
 Link to site (REMEMBER, THIS IS A WIP): -------------- (removed until finished, see image for now)
 
-![image](https://github.com/MiguelGGithub/SP-CLONE/assets/122931039/b7712ad5-a31a-40e6-b4fa-c53ec6c687b8)# Sp-Clone
+![image](https://github.com/MiguelGGithub/SP-CLONE/assets/122931039/b7712ad5-a31a-40e6-b4fa-c53ec6c687b8)
