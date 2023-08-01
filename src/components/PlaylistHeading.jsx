@@ -35,60 +35,90 @@ export default function PlaylistHeading({
   progressWidth, 
   currentSongTime, 
   isAudioLoaded, 
-  setIsAudioLoaded 
+  setIsAudioLoaded,
+  data,
+  setData,
+  playlistURL,
+  tracksLoaded,
+  setTracksLoaded,
 }){
   const [scrollPosition, setScrollPosition] = useState(0);
   const [hoveredTrackIndex, setHoveredTrackIndex] = useState(-1);
   const simpleBarRef = useRef(null);
-  
+  const [playlistChanged, setPlaylistChanged] = useState(false);
+  const prevPlaylistURLRef = useRef(null);
+  const [prevTracks, setPrevTracks] = useState([]);
+
+  const debouncedScroll = useRef(
+    debounce((scrollTop) => setScrollPosition(scrollTop), 0)
+  ).current;
+
+ 
+  const handleScroll = useRef(
+    debounce((event) => {
+      requestAnimationFrame(() => {
+        const scrollTop = event.target.scrollTop;
+        setScrollPosition(scrollTop);
+      });
+    }, 0)
+  ).current;
 
   useEffect(() => {
-    // Function to handle the initial scroll position
+   
     const handleInitialScrollPosition = () => {
       if (simpleBarRef.current) {
         setScrollPosition(simpleBarRef.current.getScrollElement().scrollTop);
       }
     };
-  
-    handleInitialScrollPosition(); // Call it once on mount to set the initial scroll position
-  
+    handleInitialScrollPosition(); 
     const playlistDiv = document.getElementById('PLAYLIST-DIV');
-  
-    const handleScroll = () => {
-      requestAnimationFrame(() => {
-        const scrollTop = playlistDiv.scrollTop;
-        setScrollPosition(scrollTop);
-      });
-    };
-  
     playlistDiv.addEventListener('scroll', handleScroll);
-  
-    // Clean up the scroll event listener when the component unmounts
-    return () => {
-      playlistDiv.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+
+  }, [debouncedScroll]);
 
   useEffect(() => {
-    // Scroll event handler for the SimpleBar component
     const handleSimpleBarScroll = () => {
       if (simpleBarRef.current) {
         setScrollPosition(simpleBarRef.current.getScrollElement().scrollTop);
       }
     };
-
-    // Attach the scroll event listener to the SimpleBar component
     if (simpleBarRef.current) {
       simpleBarRef.current.getScrollElement().addEventListener('scroll', handleSimpleBarScroll);
     }
-
-    // Clean up the scroll event listener when the component unmounts
     return () => {
       if (simpleBarRef.current) {
         simpleBarRef.current.getScrollElement().removeEventListener('scroll', handleSimpleBarScroll);
       }
     };
   }, []);
+
+  useEffect(() => {
+    setCurrentSongTime(0);
+    setCurrentProgressWidth(0);
+    audioRef.current.currentTime = 0;
+    audioRef.current.pause();
+    setIsPlaying(false);
+    
+    if (playlistURL !== prevPlaylistURLRef.current) {
+      setPlaylistChanged(true);
+      setTimeout(() => {
+        setCurrentSong(0)
+      }, 100);
+      const timer = setTimeout(() => {
+        setPlaylistChanged(false);
+        
+      }, 2000);
+
+      const parsedTracks = JSON.parse(prevPlaylistURLRef.current);
+      setPrevTracks(parsedTracks);
+      console.log(prevTracks) //////////////////////////////////////////// you left off here.
+      prevPlaylistURLRef.current = JSON.stringify(tracks);
+
+      
+
+      return () => clearTimeout(timer);
+    }
+  }, [playlistURL, tracks]);
 
 
 
@@ -272,90 +302,99 @@ export default function PlaylistHeading({
     return(
         <>
         <SimpleBar ref={simpleBarRef} forceVisible="y" autoHide={true} style={{ maxHeight: '58rem' }}>
-        <div id='PLAYLIST-DIV'>
-          <div className="playlist-content-wrapper">
-          <nav className='playlist-nav'
-          style={{ 
-            backgroundColor: scrollPosition > 330 ? 'rgb(4, 30, 44)' : 'transparent',
-          }}
-          >
-                    <div className='playlist-nav-page'>
-                        <button><i className="fa-solid fa-chevron-left"></i></button>
-                        <button><i className="fa-solid fa-chevron-right"></i></button>
-                        <div className={`fade-in ${scrollPosition > 330 ? 'visible' : ''}`}>
-                          {isPlaying ? (
-                            <i className="fa-solid fa-pause-circle" onClick={handleTopPlayPause}></i>
-                          ) : (
-                            <i className="fa-solid fa-circle-play" onClick={handleTopPlayPause}></i>
-                          )}
-                        </div>
-                    </div>
-                    
-                    <div className='playlist-user'>
-                        <button id='premium'>Explore Premium</button>
-                        <button id='installApp'><i className="fa-regular fa-circle-down"></i>Install App</button>
-                        
-                        <button>
-                          <Tippy content="Adriancito" arrow={false} placement="bottom-start">
-                          <img src="spidermandl.jpeg" alt="" />
-                          </Tippy>
-                        </button>
-                    </div>
-                </nav>
-            <div className='playlist-heading'>
-
+        <div id='PLAYLIST-DIV' >
+          <div className="playlist-content-wrapper" style={{ display: !tracksLoaded ? "none" : "block"}}>
+              <nav className='playlist-nav'
+              style={{ 
+                backgroundColor: scrollPosition > 330 ? 'rgb(4, 30, 44)' : 'transparent',
+              }}
+              >
+                      <div className='playlist-nav-page'>
+                          <button><i className="fa-solid fa-chevron-left"></i></button>
+                          <button><i className="fa-solid fa-chevron-right"></i></button>
+                          <div className={`fade-in ${scrollPosition > 330 ? 'visible' : ''}`}>
+                            {isPlaying ? (
+                              <i className="fa-solid fa-pause-circle" onClick={handleTopPlayPause}></i>
+                            ) : (
+                              <i className="fa-solid fa-circle-play" onClick={handleTopPlayPause}></i>
+                            )}
+                          </div>
+                      </div>
+                      
+                      <div className='playlist-user'>
+                          <button id='premium'>Explore Premium</button>
+                          <button id='installApp'><i className="fa-regular fa-circle-down"></i>Install App</button>
+                          
+                          <button>
+                            <Tippy content="Adriancito" arrow={false} placement="bottom-start">
+                            <img src="spidermandl.jpeg" alt="" />
+                            </Tippy>
+                          </button>
+                      </div>
+                  </nav>
 
                 
 
-                <div className='playlist-title'>
-                     <img src="playlistimage.jpg" alt="" />
-                     <div className='playlist-title-info'>
-                         <span>Playlist</span>
-                         <h1>2023 Playlist</h1>
-                        <div className='playlist-title-moreinfo'>
-                             <img src="spidermandl.jpeg" alt="" />
-                             <a href="">Adriancito</a>
-                             <i className="fa-solid fa-circle"></i>
-                            <span>{tracks.length} songs, <span>about {hours > 0 && `${hours} hr `}{remainingMinutes} mins</span></span>
-                        </div>
-                    </div>
-                </div>
+                  <div className='playlist-heading' style={{ paddingBottom: !tracksLoaded ? "16.11rem" : "0" }}>  
+                      {data.map((item) => {
+                        if (playlistURL === item.url) {
+                          return (
+                            <div className='playlist-title' key={item.id} style={{ display: !tracksLoaded ? "none" : "flex" }}>
+                              <img src={item.image} alt="" />
+                              <div className='playlist-title-info'>
+                                <span>Playlist</span>
+                                <h1><a href={item.url}>{item.name}</a></h1>
+                                <div className='playlist-title-moreinfo'>
+                                  <img src='spidermandl.jpeg' alt="" /> 
+                                  <span>{item.creator}</span>
+                                  <i className="fa-solid fa-circle"></i>
+                                  <span>{tracks.length} songs, <span>about {hours > 0 && `${hours} hr `}{remainingMinutes} mins</span></span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        } else {
+                          return null; 
+                        }
+                      })}
+                  </div>
 
 
 
-                
-            </div>
             
-          <div className='playlist-songs' id="PLAYLIST-SONGS">
-              <section>
-                 <div className='playlist-play-edit'>
-                    {isPlaying ? 
-                    <i className="fa-solid fa-pause-circle" onClick={handleTopPlayPause} ></i>
-                    : <i className="fa-solid fa-circle-play" onClick={handleTopPlayPause}></i>
-                   }
-                   <Tippy content='More options for 2023 Playlist' arrow={false}>
-                      <button><i className="fa-solid fa-ellipsis"></i></button>
-                   </Tippy>
-                    
-                  </div>
-                  <div className="grid-headings"
-                  style={{ 
-                    backgroundColor: scrollPosition > 370 ? '#121212' : 'transparent',
-                    paddingTop: scrollPosition > 370 ? '5rem' : '0.5rem',
-                  }}
-                  >
-                    <div>#<div>Title</div></div>
-                    <div>Album</div>
-                    <div>Date added</div>
-                    <div>
-                      <Tippy content='Duration' arrow={false}>
-                        <button style={{color: 'rgb(173, 173, 173)'}}><i className='fa-regular fa-clock'></i></button>
-                      </Tippy>
+                  <div className='playlist-songs' id="PLAYLIST-SONGS">
+                      <section>
+                        <div className='playlist-play-edit'>
+                            {isPlaying ? 
+                            <i className="fa-solid fa-pause-circle" onClick={handleTopPlayPause} ></i>
+                            : <i className="fa-solid fa-circle-play" onClick={handleTopPlayPause}></i>
+                          }
+                          <Tippy content='More options' arrow={false}>
+                              <button><i className="fa-solid fa-ellipsis"></i></button>
+                          </Tippy>
+                            
+                          </div>
+                          <div className="grid-headings"
+                          style={{ 
+                            backgroundColor: scrollPosition > 370 ? '#121212' : 'transparent',
+                            paddingTop: scrollPosition > 370 ? '5rem' : '0.5rem',
+                          }}
+                          >
+                            <div>#<div>Title</div></div>
+                            <div>Album</div>
+                            <div>Date added</div>
+                            <div>
+                              <Tippy content='Duration' arrow={false}>
+                                <button style={{color: 'rgb(173, 173, 173)'}}><i className='fa-regular fa-clock'></i></button>
+                              </Tippy>
+                            </div>
+                          </div>
+                          <div className="grid-container" style={{ display: !tracksLoaded ? "none" : "block"}}>
+                            {gridRows}
+                          </div>
+
+                      </section>
                     </div>
-                  </div>
-                  <div className="grid-container">{gridRows}</div>
-              </section>
-            </div>
             
             </div>
           </div>
@@ -388,6 +427,9 @@ PlaylistHeading.propTypes = {
   audioRef: PropTypes.object.isRequired,
   currentSong: PropTypes.number.isRequired,
   setCurrentSong: PropTypes.func.isRequired,
+  data: PropTypes.array.isRequired,
+  setData: PropTypes.func.isRequired,
+  playlistURL: PropTypes.string.isRequired,
 };
 
 

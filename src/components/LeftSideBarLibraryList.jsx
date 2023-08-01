@@ -4,10 +4,18 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import SimpleBar from 'simplebar-react';
 import 'simplebar-react/dist/simplebar.min.css';
+import PropTypes from 'prop-types';
 
-export default function LeftSidebarLibraryList(){
+export default function LeftSidebarLibraryList({
+    playlistURL, 
+    setPlaylistURL, 
+    data, 
+    setData,
+    setTracksLoaded,
+    tracksLoaded,
+}){
     const [selectedOption, setSelectedOption] = useState('Recents');
-    const [data, setData] = useState([]);
+    
     const [libraryTitle, setLibraryTitle] = useState(true);
 
     useEffect(() => {
@@ -29,6 +37,8 @@ export default function LeftSidebarLibraryList(){
           .then((data) => setData(data))
           .catch((error) => console.error('Error fetching data:', error));
       }, []);
+
+    
 
     return(
         <>
@@ -57,7 +67,21 @@ export default function LeftSidebarLibraryList(){
 
                 <div className="imagecon">
                 {data.map((item) => (
-                    <div key={item.id}>
+                    <div
+                    key={item.id}
+                    onClick={() => {
+                      if (item.category === 'Playlist' && item.url !== playlistURL) {
+                        setPlaylistURL(item.url);
+                        setTracksLoaded(false);
+                        setTimeout(() => {
+                            setTracksLoaded(true);
+                          }, 1000);
+                      } 
+                    }}
+                    alt={item.url}
+                    title={item.url}
+                  >
+                     
                         <img className={item.type == 'artist' ? 'artist' : ''} src={item.image} alt={item.name} />
                         <div>
                             <h4>{item.name}</h4>
@@ -76,3 +100,12 @@ export default function LeftSidebarLibraryList(){
         </>
     )
 }
+
+LeftSidebarLibraryList.propTypes = {
+    playlistURL: PropTypes.string.isRequired,
+    setPlaylistURL: PropTypes.func.isRequired,
+    data: PropTypes.array.isRequired,
+    setData: PropTypes.func.isRequired,
+    setTracksLoaded: PropTypes.func.isRequired,
+    tracksLoaded: PropTypes.bool.isRequired,
+};
