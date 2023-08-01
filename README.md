@@ -19,7 +19,7 @@ DISCLAIMERS
  PLEASE NOTE---
    This app is not mobile or tablet responsive, it is intended for desktop devices (as it is a desktop clone)
 
-Link to site (WIP, but somewhat functional): https://musicplayerclonemg.netlify.app
+Link to site (WIP, so barely functional but somewhat functional): https://musicplayerclonemg.netlify.app
 
 ![image](https://github.com/MiguelGGithub/Sp-Clone/assets/122931039/f270ac9f-92c1-40ab-a408-b32ee1173fe5)
 
