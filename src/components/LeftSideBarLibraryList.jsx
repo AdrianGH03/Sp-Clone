@@ -102,8 +102,7 @@ export default function LeftSidebarLibraryList({
 }
 
 LeftSidebarLibraryList.propTypes = {
-    playlistURL: PropTypes.string.isRequired,
-    setPlaylistURL: PropTypes.func.isRequired,
+    
     data: PropTypes.array.isRequired,
     setData: PropTypes.func.isRequired,
     setTracksLoaded: PropTypes.func.isRequired,
