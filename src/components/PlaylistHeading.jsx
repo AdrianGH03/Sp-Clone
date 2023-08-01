@@ -111,7 +111,7 @@ export default function PlaylistHeading({
 
       const parsedTracks = JSON.parse(prevPlaylistURLRef.current);
       setPrevTracks(parsedTracks);
-      console.log(prevTracks) //////////////////////////////////////////// you left off here.
+      
       prevPlaylistURLRef.current = JSON.stringify(tracks);
 
       
@@ -259,7 +259,7 @@ export default function PlaylistHeading({
           </div>
         </div>
       
-        <div className="grid-cell side">{truncatedAlbumName}</div>
+        <div className="grid-cell side"><a href={track.track.album.external_urls.spotify}>{truncatedAlbumName}</a></div>
         <div className="grid-cell side">{formatDate(track.added_at)}</div>
         <div className="grid-cell side">{msToMinutesAndSeconds(track.track.duration_ms)}</div>
       </div>
@@ -343,9 +343,9 @@ export default function PlaylistHeading({
                               <img src={item.image} alt="" />
                               <div className='playlist-title-info'>
                                 <span>Playlist</span>
-                                <h1><a href={item.url}>{item.name}</a></h1>
+                                <h1><a href={item.url} target="_blank" rel="noreferrer">{item.name}</a></h1>
                                 <div className='playlist-title-moreinfo'>
-                                  <img src='spidermandl.jpeg' alt="" /> 
+                                  <img src={item.creator == 'Adriancito' ? 'spidermandl.jpeg' : ''} alt="" /> 
                                   <span>{item.creator}</span>
                                   <i className="fa-solid fa-circle"></i>
                                   <span>{tracks.length} songs, <span>about {hours > 0 && `${hours} hr `}{remainingMinutes} mins</span></span>

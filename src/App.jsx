@@ -49,7 +49,7 @@ function App() {
   const [currentSongTime, setCurrentSongTime] = useState(0);
   const [currentProgressWidth, setCurrentProgressWidth] = useState(0);
   const [isAudioLoaded, setIsAudioLoaded] = useState(false);
-  const [playlistURL, setPlaylistURL] = useState('https://open.spotify.com/playlist/4aHEvG0cTO93AMxxYmuuis'); 
+  const [playlistURL, setPlaylistURL] = useState('https://open.spotify.com/playlist/37i9dQZF1DXbirtHQBuwCo'); 
   const [data, setData] = useState([]);
   const [tracksLoaded, setTracksLoaded] = useState(true);
 
