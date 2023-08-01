@@ -1,3 +1,5 @@
+(PROJECT ABANDONED FOR NOW, SEE MASTER BRANCH)
+
 This is a spotify clone. It is just a personal project of mine to learn React, no other purpose. It is not meant to alter or replace spotify in any way.
 
 (AS OF 7/28/23 THIS IS A WIP)
