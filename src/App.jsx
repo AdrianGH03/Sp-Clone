@@ -14,7 +14,7 @@ import 'simplebar-react/dist/simplebar.min.css';
 
 async function getTokenFromBackend() {
   try {
-    const response = await fetch('https://difficult-fly-sombrero.cyclic.app/api/token'); // Changed the endpoint to the backend route
+    const response = await fetch('https://erin-glamorous-gecko.cyclic.app/api/token'); // Changed the endpoint to the backend route
     const data = await response.json();
     const accessToken = data.token;
     return accessToken;
@@ -27,7 +27,7 @@ async function getTokenFromBackend() {
 async function fetchPlaylistTracksFromBackend(playlistURL) {
   try {
     const encodedURL = encodeURIComponent(playlistURL);
-    const response = await fetch(`https://difficult-fly-sombrero.cyclic.app/api/playlist-track-uri?playlistUrl=${encodedURL}`);
+    const response = await fetch(`https://erin-glamorous-gecko.cyclic.app/api/playlist-track-uri?playlistUrl=${encodedURL}`);
     const data = await response.json();
     const tracks = data.tracks;
     return tracks;
