@@ -32,7 +32,7 @@ export default function LeftSidebarLibraryList({
     };
 
     useEffect(() => {
-        fetch('https://difficult-fly-sombrero.cyclic.app/items')
+        fetch('https://erin-glamorous-gecko.cyclic.app/items')
           .then((response) => response.json())
           .then((data) => setData(data))
           .catch((error) => console.error('Error fetching data:', error));
