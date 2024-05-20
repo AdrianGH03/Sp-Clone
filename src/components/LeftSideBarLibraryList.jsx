@@ -32,7 +32,7 @@ export default function LeftSidebarLibraryList({
     };
 
     useEffect(() => {
-        fetch('https://sp-clone-be.netlify.app/items')
+        fetch('https://spotify-clone-backend-empc.onrender.com/items')
           .then((response) => response.json())
           .then((data) => setData(data))
           .catch((error) => console.error('Error fetching data:', error));
