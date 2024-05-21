@@ -16,7 +16,7 @@ DISCLAIMERS
 
  -- This app gains 0 monetization and is solely for demonstration and learning purposes.
 
-https://sp-cloneagh3.netlify.app
+https://sp-cloneagh3.netlify.app (Content may take 60 secs to start, as it's put to sleep)
 
 
 ![image](https://github.com/MiguelGGithub/Sp-Clone/assets/122931039/f270ac9f-92c1-40ab-a408-b32ee1173fe5)
